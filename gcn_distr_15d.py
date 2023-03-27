@@ -727,6 +727,7 @@ def main():
     global device
     global graphname
 
+    import socket
     print(socket.gethostname())
     seed = 0
 
