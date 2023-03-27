@@ -555,6 +555,8 @@ def run(rank, size, inputs, adj_matrix, data, features, classes, device):
     global timing
     global run
 
+    print(rank)
+
     best_val_acc = test_acc = 0
     outputs = None
 
@@ -572,6 +574,7 @@ def run(rank, size, inputs, adj_matrix, data, features, classes, device):
     inputs_loc, adj_matrix_loc, am_pbyp = oned_partition(rank, size, inputs, adj_matrix, data, 
                                                                 features, classes, device)
 
+    print(inputs_loc)
     inputs_loc = inputs_loc.to(device)
     adj_matrix_loc = adj_matrix_loc.to(device)
     for i in range(len(am_pbyp)):
@@ -745,7 +748,9 @@ def main():
 
         # device = torch.device('cpu')
         devid = rank_to_devid(rank, acc_per_rank)
+        print(f"rank: {rank} devid: {devid}", flush=True)
         device = torch.device('cuda:{}'.format(devid))
+        print()
         torch.cuda.set_device(device)
         curr_devid = torch.cuda.current_device()
         # print(f"curr_devid: {curr_devid}", flush=True)
