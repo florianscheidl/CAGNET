@@ -738,7 +738,7 @@ def main():
             os.environ["MASTER_ADDR"] = "127.0.0.1"
 
         os.environ["MASTER_PORT"] = "1234"
-        dist.init_process_group(backend='nccl')
+        dist.init_process_group(backend='nccl', init_method='env://', world_size=int(os.environ["WORLD_SIZE"]), rank=int(os.environ["RANK"]))
         rank = dist.get_rank()
         size = dist.get_world_size()
         print("Processes: " + str(size))
