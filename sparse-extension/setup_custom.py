@@ -6,5 +6,5 @@ setup(name='sparse_coo_tensor_cpp',
                                               extra_compile_args=["-lcusparse"],
                                               include_dirs=["/apps/ault/spack/opt/spack/linux-centos8-zen/gcc-8.4.1/cuda-10.1.243-esf7lrqweehid7ugtyko5tirmuqvcvqp/include",
                                                             "/apps/ault/spack/opt/spack/linux-centos8-zen/gcc-8.4.1/cuda-10.1.243-esf7lrqweehid7ugtyko5tirmuqvcvqp/lib64"],
-                                              extra_link_args=["-lcusparse_static", "-lcudart_static", "-lpthreat", "-ldl"],)],
+                                              extra_link_args=["-lcusparse_static", "-lcudart_static", "-lpthread", "-ldl"],)],
       cmdclass={'build_ext': cpp_extension.BuildExtension})
