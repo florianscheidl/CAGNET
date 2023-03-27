@@ -754,18 +754,18 @@ def main():
 
             hostfile = "dist_url." + jobid + ".txt"
             if args.dist_file is not None:
-                args.dist_url = "file://{}.{}".format(os.path.realpath(args.dist_file), jobid)
+                dist_url = "file://{}.{}".format(os.path.realpath(args.dist_file), jobid)
             elif args.rank == 0:
                 import socket
                 ip = socket.gethostbyname(socket.gethostname())
                 port = find_free_port()
-                args.dist_url = "tcp://{}:{}".format(ip, port)
+                dist_url = "tcp://{}:{}".format(ip, port)
                 with open(hostfile, "w") as f:
-                    f.write(args.dist_url)
+                    f.write(dist_url)
 
         os.environ["MASTER_PORT"] = "1234"
 
-        dist.init_process_group(backend='nccl', init_method=args.dist_url, world_size=args.world_size, rank=args.rank)
+        dist.init_process_group(backend='nccl', init_method=dist_url, world_size=args.world_size, rank=args.rank)
         rank = dist.get_rank()
         size = dist.get_world_size()
         print("Processes: " + str(size))
