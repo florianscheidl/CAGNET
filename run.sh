@@ -10,7 +10,7 @@
 #SBATCH --constraint=gpu
 #SBATCH --hint=nomultithread
 
-export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+# export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 export OMPI_COMM_WORLD_SIZE=$((SLURM_NTASKS * SLURM_NTASKS_PER_NODE))
 export NCCL_DEBUG=INFO
 export NCCL_IB_HCA=ipogif0
