@@ -764,6 +764,8 @@ def main():
                     f.write(dist_url)
         else:
             dist_url = "env://"
+            args.rank = 0
+            args.world_size = 1
 
         os.environ["MASTER_PORT"] = "1234"
 
