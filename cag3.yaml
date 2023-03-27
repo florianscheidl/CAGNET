@@ -1,18 +1,18 @@
 name: cag3
 channels:
-  - omgarcia
+#  - omgarcia
   - defaults
 dependencies:
   - _libgcc_mutex=0.1=main
   - _openmp_mutex=5.1=1_gnu
   - ca-certificates=2023.01.10=h06a4308_0
   - certifi=2021.5.30=py36h06a4308_0
-  - gcc-6=6.1.0=2
+#   - gcc-6=6.1.0=2
   - gmp=6.2.1=h295c915_3
   - isl=0.17.1=0
   - ld_impl_linux-64=2.38=h1181459_1
   - libffi=3.3=he6710b0_2
-  - libgcc-6=6.1.0=2
+#  - libgcc-6=6.1.0=2
   - libgcc-ng=11.2.0=h1234567_1
   - libgomp=11.2.0=h1234567_1
   - libstdcxx-ng=11.2.0=h1234567_1
