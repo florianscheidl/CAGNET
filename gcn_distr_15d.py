@@ -762,6 +762,8 @@ def main():
                 dist_url = "tcp://{}:{}".format(ip, port)
                 with open(hostfile, "w") as f:
                     f.write(dist_url)
+        else:
+            dist_url = "env://"
 
         os.environ["MASTER_PORT"] = "1234"
 
