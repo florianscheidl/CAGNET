@@ -98,6 +98,12 @@ def stop_time(group, rank, tstart):
         tstop = time.time()
     return tstop - tstart
 
+def find_free_port():
+    import socket
+    s = socket.socket()
+    s.bind(('', 0))            # Bind to a free port provided by the host.
+    return s.getsockname()[1]  # Return the port number assigned.
+
 def normalize(adj_matrix):
     adj_matrix = adj_matrix + torch.eye(adj_matrix.size(0))
     d = torch.sum(adj_matrix, dim=1)
@@ -740,17 +746,33 @@ def main():
         if "MASTER_ADDR" not in os.environ.keys():
             os.environ["MASTER_ADDR"] = "127.0.0.1"
 
+        if args.world_size == -1 and "SLURM_NPROCS" in os.environ:
+            args.world_size = int(os.environ["SLURM_NPROCS"])
+            args.rank = int(os.environ["SLURM_PROCID"])
+            jobid = os.environ["SLURM_JOBID"]
+
+            hostfile = "dist_url." + jobid + ".txt"
+            if args.dist_file is not None:
+                args.dist_url = "file://{}.{}".format(os.path.realpath(args.dist_file), jobid)
+            elif args.rank == 0:
+                import socket
+                ip = socket.gethostbyname(socket.gethostname())
+                port = find_free_port()
+                args.dist_url = "tcp://{}:{}".format(ip, port)
+                with open(hostfile, "w") as f:
+                    f.write(args.dist_url)
+
         os.environ["MASTER_PORT"] = "1234"
-        dist.init_process_group(backend='nccl', init_method='env://', world_size=1, rank=0)
+
+        dist.init_process_group(backend='nccl', init_method=args.dist_url, world_size=args.world_size, rank=args.rank)
         rank = dist.get_rank()
         size = dist.get_world_size()
         print("Processes: " + str(size))
 
         # device = torch.device('cpu')
         devid = rank_to_devid(rank, acc_per_rank)
-        print(f"rank: {rank} devid: {devid}", flush=True)
         device = torch.device('cuda:{}'.format(devid))
-        print()
+
         torch.cuda.set_device(device)
         curr_devid = torch.cuda.current_device()
         # print(f"curr_devid: {curr_devid}", flush=True)
@@ -850,8 +872,11 @@ if __name__ == '__main__':
     parser.add_argument("--accuracy", type=str, default="True")
     parser.add_argument("--download", type=bool, default=False)
 
+    parser.add_argument("--world_size", type=int, default=-1)
+    parser.add_argument("--dist_file", type=str, default=None)  # needs to be added in case of distributed training!
+
+
     args = parser.parse_args()
-    print(args)
 
     acc_per_rank = args.accperrank
 
