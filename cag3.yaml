@@ -9,7 +9,7 @@ dependencies:
   - certifi=2021.5.30=py36h06a4308_0
 #   - gcc-6=6.1.0=2
   - gmp=6.2.1=h295c915_3
-  - isl=0.17.1=0
+#  - isl=0.17.1=0
   - ld_impl_linux-64=2.38=h1181459_1
   - libffi=3.3=he6710b0_2
 #  - libgcc-6=6.1.0=2
