@@ -8,7 +8,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --constraint=gpu
 #SBATCH --partition=debug
-#SBATCH --mem=100G
+#SBATCH --mem=50G
 #SBATCH --hint=nomultithread
 
 module load cuda/10.1
