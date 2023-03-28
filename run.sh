@@ -7,7 +7,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=1
 #SBATCH --constraint=gpu
-#SBATCH --partition=total*
+#SBATCH --partition=total
 #SBATCH --hint=nomultithread
 
 # export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
