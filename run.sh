@@ -14,12 +14,13 @@
 # export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
 module load cuda/10.1
+conda activate cag3
 
 export OMPI_COMM_WORLD_SIZE=$((SLURM_NTASKS * SLURM_NTASKS_PER_NODE))
 export NCCL_DEBUG=INFO
 export NCCL_IB_HCA=ipogif0
 export NCCL_IB_CUDA_SUPPORT=1
 export NCCL_SOCKET_IFNAME=ipogif0
-export PYTHONPATH=$PYTHONPATH:/users/fscheidl/miniconda3/envs/cag3/lib/python3.6/site-packages
+# export PYTHONPATH=$PYTHONPATH:/users/fscheidl/miniconda3/envs/cag3/lib/python3.6/site-packages
 
 srun python3.6 gcn_distr_15d.py --dist_file="dist_file_x"
