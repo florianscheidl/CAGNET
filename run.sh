@@ -17,4 +17,4 @@ export NCCL_IB_HCA=ipogif0
 export NCCL_IB_CUDA_SUPPORT=1
 export NCCL_SOCKET_IFNAME=ipogif0
 
-srun python gcn_distr_15d.py --mem=400G --dist_file="dist_file_x"
+srun --mem=400G python gcn_distr_15d.py --dist_file="dist_file_x"
