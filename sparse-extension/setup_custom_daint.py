@@ -6,5 +6,10 @@ setup(name='sparse_coo_tensor_cpp',
                                               extra_compile_args=["-lcusparse"],
                                               include_dirs=["/opt/nvidia/cudatoolkit10.2/10.2.89_3.28-2.1__g52c0314/include",
                                                             "/opt/nvidia/cudatoolkit10.2/10.2.89_3.28-2.1__g52c0314/lib64"],
-                                              extra_link_args=["-lpthread", "-lcusparse_static", "-lcudart_static", "-ldl"])],
+                                              extra_link_args=["-lpthread", "-lcusparse_static", "-lcudart_static", "-ldl"],
+                                              extra_include_paths=["/opt/nvidia/cudatoolkit10.2/10.2.89_3.28-2.1__g52c0314/include",
+                                                                   "/opt/nvidia/cudatoolkit10.2/10.2.89_3.28-2.1__g52c0314/lib64"])],
       cmdclass={'build_ext': cpp_extension.BuildExtension})
+
+# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/nvidia/cudatoolkit10.2/10.2.89_3.28-2.1__g52c0314/include
+# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/nvidia/cudatoolkit10.2/10.2.89_3.28-2.1__g52c0314/lib64
