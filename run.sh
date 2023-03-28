@@ -8,7 +8,6 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --partition=normal
 #SBATCH --constraint=gpu
-#SBATCH --mem=1400G
 #SBATCH --hint=nomultithread
 
 # export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
@@ -18,4 +17,4 @@ export NCCL_IB_HCA=ipogif0
 export NCCL_IB_CUDA_SUPPORT=1
 export NCCL_SOCKET_IFNAME=ipogif0
 
-srun python gcn_distr_15d.py --dist_file="dist_file_x"
+srun python gcn_distr_15d.py --mem=400G --dist_file="dist_file_x"
