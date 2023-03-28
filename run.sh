@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH --job-name="job_name"
 #SBATCH --account="g34"
-#SBATCH --time=01:00:00
+#SBATCH --time=30:00
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-core=1
 #SBATCH --ntasks-per-node=1
