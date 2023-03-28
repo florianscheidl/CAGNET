@@ -22,4 +22,4 @@ export NCCL_IB_CUDA_SUPPORT=1
 export NCCL_SOCKET_IFNAME=ipogif0
 export PYTHONPATH=$PYTHONPATH:/users/fscheidl/miniconda3/envs/cag3/lib/python3.6/site-packages
 
-srun python gcn_distr_15d.py --dist_file="dist_file_x"
+srun python3.6 gcn_distr_15d.py --dist_file="dist_file_x"
