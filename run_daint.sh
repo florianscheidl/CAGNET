@@ -20,4 +20,4 @@ export NCCL_IB_HCA=ipogif0
 export NCCL_IB_CUDA_SUPPORT=1
 export NCCL_SOCKET_IFNAME=ipogif0
 
-srun python3.6 gcn_distr_15d.py --dist_file="dist_file_x"
+srun python3.6 gcn_distr_15d.py --dist_file="dist_file_x" --graphname=Amazon

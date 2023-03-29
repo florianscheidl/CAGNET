@@ -570,7 +570,7 @@ def run(rank, size, inputs, adj_matrix, data, features, classes, device):
     # inputs_loc = torch.rand(n_per_proc, inputs.size(1))
 
     group = dist.new_group(list(range(size)))
-    print(group)
+    # print(group)
     row_groups, col_groups = get_proc_groups(rank, size) 
 
     rank_c = rank // replication
