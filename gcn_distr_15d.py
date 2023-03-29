@@ -775,7 +775,7 @@ def main():
         print(os.environ["MASTER_ADDR"])
         print(os.environ["MASTER_PORT"])
         print(os.environ["NCCL_DEBUG"])
-        print(os.environ["NCCL_DEBUG_SUBSYS"])
+        # print(os.environ["NCCL_DEBUG_SUBSYS"])
 
         dist.init_process_group(backend='nccl', init_method=dist_url, world_size=args.world_size, rank=args.rank)
         rank = dist.get_rank()

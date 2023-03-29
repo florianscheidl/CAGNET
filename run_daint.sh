@@ -19,5 +19,8 @@ export NCCL_DEBUG=INFO
 export NCCL_IB_HCA=ipogif0
 export NCCL_IB_CUDA_SUPPORT=1
 export NCCL_SOCKET_IFNAME=ipogif0
+export MASTER_ADDR=$(srun --ntasks=1 hostname 2>&1 | tail -n1)
+echo $MASTER_ADDR
+
 
 srun python3.6 gcn_distr_15d.py --dist_file="dist_file_x" --graphname=Amazon
