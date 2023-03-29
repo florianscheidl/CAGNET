@@ -570,7 +570,9 @@ def run(rank, size, inputs, adj_matrix, data, features, classes, device):
     # inputs_loc = torch.rand(n_per_proc, inputs.size(1))
 
     group = dist.new_group(list(range(size)))
-    # print(group)
+
+    print("Group size", size)
+
     row_groups, col_groups = get_proc_groups(rank, size) 
 
     rank_c = rank // replication
@@ -588,7 +590,7 @@ def run(rank, size, inputs, adj_matrix, data, features, classes, device):
         am_pbyp[i] = am_pbyp[i].t().coalesce().to(device)
 
     adj_matrix_loc.coalesce()
-    dist.barrier(group)
+    dist.barrier()
 
     for i in range(run_count):
         run = i
