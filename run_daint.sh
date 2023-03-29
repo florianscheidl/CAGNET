@@ -11,14 +11,15 @@
 #SBATCH --mem=50G
 #SBATCH --hint=nomultithread
 
+module load daint-gpu
 module load cudatoolkit/10.2.89_3.28-2.1__g52c0314
 conda activate cag3
 
 export OMPI_COMM_WORLD_SIZE=$((SLURM_NTASKS * SLURM_NTASKS_PER_NODE))
 export NCCL_DEBUG=INFO
-export NCCL_IB_HCA=ipogif0
-export NCCL_IB_CUDA_SUPPORT=1
-export NCCL_SOCKET_IFNAME=ipogif0
+#export NCCL_IB_HCA=ipogif0
+#export NCCL_IB_CUDA_SUPPORT=1
+#export NCCL_SOCKET_IFNAME=ipogif0
 export MASTER_ADDR=$(srun --ntasks=1 hostname 2>&1 | tail -n1)
 echo $MASTER_ADDR
 
