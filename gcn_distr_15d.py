@@ -757,23 +757,23 @@ def main():
 
             hostfile = "dist_url." + jobid + ".txt"
             if args.dist_file is not None:
-                dist_url = "file://{}.{}".format(os.path.realpath(args.dist_file), jobid)
+                args.dist_url = "file://{}.{}".format(os.path.realpath(args.dist_file), jobid)
             elif args.rank == 0:
                 import socket
                 ip = socket.gethostbyname(socket.gethostname())
                 port = find_free_port()
-                dist_url = "tcp://{}:{}".format(ip, port)
+                args.dist_url = "tcp://{}:{}".format(ip, port)
                 with open(hostfile, "w") as f:
-                    f.write(dist_url)
+                    f.write(args.dist_url)
             else:
                 import time
                 while not os.path.exists(hostfile):
                     time.sleep(1)
                 with open(hostfile, "r") as f:
                     args.dist_url = f.read()
-            print("dist_url: {}".format(dist_url))
+            print("args.dist_url: {}".format(args.dist_url))
         else:
-            dist_url = "env://"
+            args.dist_url = "env://"
             args.rank = 0
             args.world_size = 1
 
@@ -784,7 +784,7 @@ def main():
         print(os.environ["NCCL_DEBUG"])
         # print(os.environ["NCCL_DEBUG_SUBSYS"])
 
-        dist.init_process_group(backend='nccl', init_method=dist_url, world_size=args.world_size, rank=args.rank)
+        dist.init_process_group(backend='nccl', init_method=args.dist_url, world_size=args.world_size, rank=args.rank)
         rank = dist.get_rank()
         size = dist.get_world_size()
         print("Processes: " + str(size))
