@@ -771,6 +771,7 @@ def main():
                     time.sleep(1)
                 with open(hostfile, "r") as f:
                     args.dist_url = f.read()
+            print("dist_url: {}".format(dist_url))
         else:
             dist_url = "env://"
             args.rank = 0
