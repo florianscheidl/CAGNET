@@ -812,7 +812,7 @@ def main():
         print(f"Loading coo...", flush=True)
         edge_index = torch.load("/scratch/snx3000/fscheidl/Amazon/amazon_graph_jsongz.pt")
         print(f"Done loading coo", flush=True)
-        # edge_index = edge_index.t_()
+        edge_index = edge_index.t_()
         # n = 9430088
         n = 14249639
         # n = 14249640
