@@ -810,7 +810,7 @@ def main():
         num_classes = dataset.num_classes
     elif graphname == 'Amazon':
         print(f"Loading coo...", flush=True)
-        edge_index = torch.load("../data/Amazon/processed/data.pt")
+        edge_index = torch.load("/scratch/snx3000/fscheidl/Amazon/amazon_graph_jsongz.pt")
         print(f"Done loading coo", flush=True)
         # edge_index = edge_index.t_()
         # n = 9430088
