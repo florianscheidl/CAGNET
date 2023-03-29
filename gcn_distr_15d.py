@@ -595,8 +595,8 @@ def run(rank, size, inputs, adj_matrix, data, features, classes, device):
         am_pbyp[i] = am_pbyp[i].t().coalesce().to(device)
 
     print("Before coalesce, coalesce removed!!")
-    # adj_matrix_loc.coalesce()
-    # print("Coalesced")
+    adj_matrix_loc.coalesce()
+    print("Coalesced")
 
     exit()
 
