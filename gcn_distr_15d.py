@@ -21,6 +21,8 @@ from torch.multiprocessing import Manager, Process
 from torch.nn import Parameter
 import torch.nn.functional as F
 
+from tqdm import tqdm
+
 from torch_scatter import scatter_add
 import torch_sparse
 
@@ -590,9 +592,12 @@ def run(rank, size, inputs, adj_matrix, data, features, classes, device):
         am_pbyp[i] = am_pbyp[i].t().coalesce().to(device)
 
     adj_matrix_loc.coalesce()
-    dist.barrier(group)
+    print("Coalesced")
 
-    for i in range(run_count):
+    dist.barrier(group)
+    print("rank: ", rank, " adj_matrix_loc.size: ", adj_matrix_loc.size())
+
+    for i in tqdm(range(run_count)):
         run = i
         torch.manual_seed(0)
         weight1_nonleaf = torch.rand(features, mid_layer, requires_grad=True)
