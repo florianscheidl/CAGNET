@@ -594,13 +594,13 @@ def run(rank, size, inputs, adj_matrix, data, features, classes, device):
     for i in range(len(am_pbyp)):
         am_pbyp[i] = am_pbyp[i].t().coalesce().to(device)
 
-    print("Before coalesce, coalesce removed!!")
+    # print("Before coalesce, coalesce removed!!")
     adj_matrix_loc.coalesce()
-    print("Coalesced")
-
-    exit()
+    # print("Coalesced")
 
     dist.barrier(group)
+    exit()
+
     print("rank: ", rank, " adj_matrix_loc.size: ", adj_matrix_loc.size())
 
     for i in tqdm(range(run_count)):
