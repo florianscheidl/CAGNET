@@ -765,6 +765,12 @@ def main():
                 dist_url = "tcp://{}:{}".format(ip, port)
                 with open(hostfile, "w") as f:
                     f.write(dist_url)
+            else:
+                import time
+                while not os.path.exists(hostfile):
+                    time.sleep(1)
+                with open(hostfile, "r") as f:
+                    args.dist_url = f.read()
         else:
             dist_url = "env://"
             args.rank = 0
