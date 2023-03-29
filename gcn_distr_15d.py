@@ -633,7 +633,7 @@ def run(rank, size, inputs, adj_matrix, data, features, classes, device):
         # Do not time first epoch
         timing_on = timing == True
         timing = False
-
+        print(f"Starting training... rank {rank} run {i}", flush=True)
         outputs = train(inputs_loc, weight1, weight2, adj_matrix_loc, am_pbyp, optimizer, data, 
                                     rank, size, group, row_groups, col_groups)
         if timing_on:
