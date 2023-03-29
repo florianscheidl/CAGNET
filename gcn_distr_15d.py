@@ -586,6 +586,8 @@ def run(rank, size, inputs, adj_matrix, data, features, classes, device):
                                                                 features, classes, device)
 
     print("inputs_loc", inputs_loc)
+    exit()
+
     inputs_loc = inputs_loc.to(device)
     print("Loaded inputs_loc, starting to laod adj_matrix_loc")
     adj_matrix_loc = adj_matrix_loc.to(device)
