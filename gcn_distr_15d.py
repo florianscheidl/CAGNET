@@ -590,7 +590,7 @@ def run(rank, size, inputs, adj_matrix, data, features, classes, device):
         am_pbyp[i] = am_pbyp[i].t().coalesce().to(device)
 
     adj_matrix_loc.coalesce()
-    dist.barrier()
+    dist.barrier(group)
 
     for i in range(run_count):
         run = i
@@ -771,6 +771,11 @@ def main():
             args.world_size = 1
 
         os.environ["MASTER_PORT"] = "1234"
+
+        print(os.environ["MASTER_ADDR"])
+        print(os.environ["MASTER_PORT"])
+        print(os.environ["NCCL_DEBUG"])
+        print(os.environ["NCCL_DEBUG_SUBSYS"])
 
         dist.init_process_group(backend='nccl', init_method=dist_url, world_size=args.world_size, rank=args.rank)
         rank = dist.get_rank()
