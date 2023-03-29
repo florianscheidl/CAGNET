@@ -24,4 +24,6 @@ export MASTER_ADDR=$(srun --ntasks=1 hostname 2>&1 | tail -n1)
 echo $MASTER_ADDR
 
 
-srun python3.6 gcn_distr_15d.py --dist_file="dist_file_x" --graphname=Amazon
+srun python3.6 gcn_distr_15d.py --dist_file="dist_file_x" --graphname=Cora
+
+# python gcn_distr_15d.py --graphname=Cora --download=True
