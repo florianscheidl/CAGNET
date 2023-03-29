@@ -585,8 +585,9 @@ def run(rank, size, inputs, adj_matrix, data, features, classes, device):
     inputs_loc, adj_matrix_loc, am_pbyp = oned_partition(rank, size, inputs, adj_matrix, data, 
                                                                 features, classes, device)
 
-    print(inputs_loc)
+    print("inputs_loc", inputs_loc)
     inputs_loc = inputs_loc.to(device)
+    print("Loaded inputs_loc, starting to laod adj_matrix_loc")
     adj_matrix_loc = adj_matrix_loc.to(device)
     for i in range(len(am_pbyp)):
         am_pbyp[i] = am_pbyp[i].t().coalesce().to(device)
