@@ -599,7 +599,6 @@ def run(rank, size, inputs, adj_matrix, data, features, classes, device):
     # print("Coalesced")
 
     dist.barrier(group)
-    exit()
 
     print("rank: ", rank, " adj_matrix_loc.size: ", adj_matrix_loc.size())
 
