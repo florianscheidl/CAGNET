@@ -796,7 +796,7 @@ def main():
         # print(os.environ["NCCL_DEBUG_SUBSYS"])
 
         # dist.init_process_group(backend='nccl', init_method=args.dist_url, world_size=args.world_size, rank=args.rank)
-        dist.init_process_group(backend='mpi', init_method=args.dist_url, world_size=args.world_size, rank=args.rank)
+        dist.init_process_group(backend='gloo', init_method=args.dist_url, world_size=args.world_size, rank=args.rank)
         rank = dist.get_rank()
         size = dist.get_world_size()
         print("Processes: " + str(size))
