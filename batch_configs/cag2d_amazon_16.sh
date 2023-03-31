@@ -1,13 +1,13 @@
 #!/bin/bash -l
 #SBATCH --job-name="job_name"
 #SBATCH --account="g34"
-#SBATCH --time=30:00
-#SBATCH --nodes=9
+#SBATCH --time=2:00:00
+#SBATCH --nodes=16
 #SBATCH --ntasks-per-core=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=1
 #SBATCH --constraint=gpu
-#SBATCH --partition=debug
+#SBATCH --partition=normal
 #SBATCH --mem=50G
 #SBATCH --hint=nomultithread
 
@@ -24,4 +24,4 @@ export TORCH_SHOW_CPP_STACKTRACES=1
 export MASTER_ADDR=$(srun --ntasks=1 hostname 2>&1 | tail -n1)
 echo $MASTER_ADDR
 
-srun python3.6 gcn_distr_15d.py --graphname=Amazon
+srun python3.6 gcn_distr_2d.py --graphname=Amazon
