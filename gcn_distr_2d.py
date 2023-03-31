@@ -1397,6 +1397,7 @@ def init_process(rank, size, inputs, adj_matrix, data, features, mid_layer, clas
 
 def main():
     # graphname = 'Reddit'
+    global device
     global graphname
     global mid_layer
 
@@ -1415,51 +1416,153 @@ def main():
         # num_classes = dataset.num_classes + 9
         num_classes = dataset.num_classes
         print(f"before edge_index: {data.edge_index.size()}")
+
     elif graphname == 'Amazon':
-        # edge_index = torch.load(path + "/processed/amazon_graph.pt")
-        # edge_index = torch.load("/gpfs/alpine/bif115/scratch/alokt/Amazon/processed/amazon_graph_random.pt")
-        # edge_index = torch.load("/gpfs/alpine/bif115/scratch/alokt/Amazon/processed/amazon_large_randomized.pt")
         print(f"Loading coo...", flush=True)
-        edge_index = torch.load("../data/Amazon/processed/data.pt")
+
+        # loading on Piz Daint
+        edge_index = torch.load("/scratch/snx3000/fscheidl/Amazon/amazon_graph_jsongz.pt")
         print(f"Done loading coo", flush=True)
-        # edge_index = edge_index.t_()
-        # n = 9430086
-        # n = 9430088
+        edge_index = edge_index.t_()
+
         n = 14249639
         num_features = 300
         num_classes = 24
-        # mid_layer = 24
+
         inputs = torch.rand(n, num_features)
         data = Data()
-        data.y = torch.rand(n).uniform_(0, num_classes - 1)
+        data.y = torch.rand(n).uniform_(0, num_classes - 1).long()
         data.train_mask = torch.ones(n).long()
-        print(f"before edge_index: {edge_index.size()}")
-    elif graphname == 'subgraph5':
-        path = "/gpfs/alpine/bif115/scratch/alokt/HipMCL/"
-        edge_index = torch.load(path + "/processed/subgraph5_graph.pt")
-        n = 2186385
-        num_features = 128
-        # mid_layer = 64
-        num_classes = 256
-        inputs = torch.rand(n, num_features)
-        data = Data()
-        data.y = torch.rand(n).uniform_(0, num_classes - 1)
-        data.train_mask = torch.ones(n).long()
-    elif graphname == 'subgraph3':
-        # path = "/gpfs/alpine/bif115/scratch/alokt/HipMCL/"
-        # edge_index = torch.load(path + "/processed/subgraph3_graph.pt")
+
+        print(f"edge_index.size: {edge_index.size()}", flush=True)
+        print(f"edge_index: {edge_index}", flush=True)
+        data = data.to(device)
+        inputs.requires_grad = True
+        data.y = data.y.to(device)
+
+    elif graphname == 'mawi200M':
+
+        # Loading
         print(f"Loading coo...", flush=True)
-        edge_index = torch.load("../data/subgraph3/processed/data.pt")
+
+        # Getting edge index
+        edge_index = torch.load("/scratch/snx3000/fscheidl/Amazon/amazon_graph_jsongz.pt")
         print(f"Done loading coo", flush=True)
-        n = 8745542
+        edge_index = edge_index.t_()
+
+        # graph properties
+        n = 226196185  # todo: improvement get this from the edge index (something similar to n=edge_index.unique().size(0))
         num_features = 128
-        # mid_layer = 512
-        # mid_layer = 64
-        num_classes = 256
+        num_classes = 3
+
+        # load inputs
         inputs = torch.rand(n, num_features)
         data = Data()
-        data.y = torch.rand(n).uniform_(0, num_classes - 1)
+        data.y = torch.rand(n).uniform_(0, num_classes - 1).long()
         data.train_mask = torch.ones(n).long()
+
+        print(f"edge_index.size: {edge_index.size()}", flush=True)
+        print(f"edge_index: {edge_index}", flush=True)
+        data = data.to(device)
+
+        inputs.requires_grad = True
+        data.y = data.y.to(device)
+
+        raise UserWarning("Not finished yet!")
+
+    elif graphname == 'WebBase':
+
+        # Loading
+        print(f"Loading coo...", flush=True)
+
+        # Getting edge index
+        edge_index = torch.load("/scratch/snx3000/fscheidl/Amazon/amazon_graph_jsongz.pt")
+        print(f"Done loading coo", flush=True)
+        edge_index = edge_index.t_()
+
+        # graph properties
+        n = 118142155  # todo: improvement get this from the edge index (something similar to n=edge_index.unique().size(0))
+        num_features = 128
+        num_classes = 24
+        UserWarning("Unknown number of classes!")
+
+        # load inputs
+        inputs = torch.rand(n, num_features)
+        data = Data()
+        data.y = torch.rand(n).uniform_(0, num_classes - 1).long()
+        data.train_mask = torch.ones(n).long()
+
+        print(f"edge_index.size: {edge_index.size()}", flush=True)
+        print(f"edge_index: {edge_index}", flush=True)
+        data = data.to(device)
+
+        inputs.requires_grad = True
+        data.y = data.y.to(device)
+
+        raise UserWarning("Not finished yet!")
+
+    elif graphname == 'GenBank200M':
+
+        # Loading
+        print(f"Loading coo...", flush=True)
+
+        # Getting edge index
+        edge_index = torch.load("/scratch/snx3000/fscheidl/Amazon/amazon_graph_jsongz.pt")
+        print(f"Done loading coo", flush=True)
+        edge_index = edge_index.t_()
+
+        # graph properties
+        n = 214005017  # todo: improvement get this from the edge index (something similar to n=edge_index.unique().size(0))
+        num_features = 128
+        num_classes = 24
+        UserWarning("Unknown number of classes!")
+
+        # load inputs
+        inputs = torch.rand(n, num_features)
+        data = Data()
+        data.y = torch.rand(n).uniform_(0, num_classes - 1).long()
+        data.train_mask = torch.ones(n).long()
+
+        print(f"edge_index.size: {edge_index.size()}", flush=True)
+        print(f"edge_index: {edge_index}", flush=True)
+        data = data.to(device)
+
+        inputs.requires_grad = True
+        data.y = data.y.to(device)
+
+        raise UserWarning("Not finished yet!")
+
+
+    elif graphname == 'ogbn-papers100M':
+
+        # Loading
+        print(f"Loading coo...", flush=True)
+
+        # Getting edge index
+        edge_index = torch.load("/scratch/snx3000/fscheidl/Amazon/amazon_graph_jsongz.pt")
+        print(f"Done loading coo", flush=True)
+        edge_index = edge_index.t_()
+
+        # graph properties
+        n = 111059956  # todo: improvement get this from the edge index (something similar to n=edge_index.unique().size(0))
+        num_features = 128
+        num_classes = 172
+
+        # load inputs
+        inputs = torch.rand(n, num_features)
+        data = Data()
+        data.y = torch.rand(n).uniform_(0, num_classes - 1).long()
+        data.train_mask = torch.ones(n).long()
+
+        print(f"edge_index.size: {edge_index.size()}", flush=True)
+        print(f"edge_index: {edge_index}", flush=True)
+        data = data.to(device)
+
+        inputs.requires_grad = True
+        data.y = data.y.to(device)
+
+        raise UserWarning("Not finished yet!")
+
 
     if download:
         exit()
@@ -1478,7 +1581,7 @@ def main():
         os.environ["MASTER_ADDR"] = "127.0.0.1"
 
     os.environ["MASTER_PORT"] = "1234"
-    dist.init_process_group(backend='nccl')
+    dist.init_process_group(backend='gloo')
     # dist.init_process_group('gloo', init_method='env://')
     rank = dist.get_rank()
     size = dist.get_world_size()
