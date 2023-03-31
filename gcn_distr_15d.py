@@ -26,6 +26,8 @@ from tqdm import tqdm
 from torch_scatter import scatter_add
 import torch_sparse
 
+from ogb.nodeproppred import NodePropPredDataset
+
 from sparse_coo_tensor_cpp import sparse_coo_tensor_gpu, spmm_gpu
 
 import socket
@@ -840,6 +842,7 @@ def main():
         edge_index = data.edge_index
         num_features = dataset.num_features
         num_classes = dataset.num_classes
+
     elif graphname == "Reddit":
         path = osp.join(osp.dirname(osp.realpath(__file__)), '..', 'data', graphname)
         dataset = Reddit(path, T.NormalizeFeatures())
@@ -882,9 +885,12 @@ def main():
         print(f"Loading coo...", flush=True)
 
         # Getting edge index
-        edge_index = torch.load("/scratch/snx3000/fscheidl/Amazon/amazon_graph_jsongz.pt")
-        print(f"Done loading coo", flush=True)
-        edge_index = edge_index.t_()
+        if os.path.isfile("/scratch/snx3000/sashkboo/datasets/mawi200M/mawi200M.pt"):
+            edge_index = torch.load("/scratch/snx3000/sashkboo/datasets/mawi200M/mawi200M.pt")
+        else:
+            print("Creating edge index file from .mat file")
+            # todo: create the edge index file from the .mat file and store as torch.tensor
+            raise NotImplementedError
 
         # graph properties
         n = 226196185  # todo: improvement get this from the edge index (something similar to n=edge_index.unique().size(0))
@@ -912,9 +918,12 @@ def main():
         print(f"Loading coo...", flush=True)
 
         # Getting edge index
-        edge_index = torch.load("/scratch/snx3000/fscheidl/Amazon/amazon_graph_jsongz.pt")
-        print(f"Done loading coo", flush=True)
-        edge_index = edge_index.t_()
+        if os.path.isfile("/scratch/snx3000/sashkboo/datasets/webbase/webbase-2001.pt"):
+            edge_index = torch.load("/scratch/snx3000/sashkboo/datasets/webbase/webbase-2001.pt")
+        else:
+            print("Creating edge index file from .mat file")
+            # todo: create the edge index file from the .mat file and store as torch.tensor
+            raise NotImplementedError
 
         # graph properties
         n = 118142155  # todo: improvement get this from the edge index (something similar to n=edge_index.unique().size(0))
@@ -943,9 +952,14 @@ def main():
         print(f"Loading coo...", flush=True)
 
         # Getting edge index
-        edge_index = torch.load("/scratch/snx3000/fscheidl/Amazon/amazon_graph_jsongz.pt")
+        if os.path.isfile("/scratch/snx3000/sashkboo/datasets/genbank/genbank200M.pt"):
+            edge_index = torch.load("/scratch/snx3000/sashkboo/datasets/genbank/genbank200M.pt") ##todo: paths are wrong
+        else:
+            print("Creating edge index file from .mat file")
+            # todo: create the edge index file from the .mat file and store as torch.tensor
+            raise NotImplementedError
+
         print(f"Done loading coo", flush=True)
-        edge_index = edge_index.t_()
 
         # graph properties
         n = 214005017  # todo: improvement get this from the edge index (something similar to n=edge_index.unique().size(0))
@@ -968,16 +982,17 @@ def main():
 
         raise UserWarning("Not finished yet!")
 
-
     elif graphname == 'ogbn-papers100M':
 
         # Loading
-        print(f"Loading coo...", flush=True)
+        print(f"Loading coo...")
 
         # Getting edge index
-        edge_index = torch.load("/scratch/snx3000/fscheidl/Amazon/amazon_graph_jsongz.pt")
-        print(f"Done loading coo", flush=True)
-        edge_index = edge_index.t_()
+        dataset = NodePropPredDataset(name='ogbn-papers100M', root='/scratch/snx3000/fscheidl/ogbn-papers100M')
+        graph, label = dataset[0]
+        edge_index = torch.tensor(graph.edge_index)
+
+        print(f"Done loading edge index")
 
         # graph properties
         n = 111059956  # todo: improvement get this from the edge index (something similar to n=edge_index.unique().size(0))
@@ -999,24 +1014,6 @@ def main():
 
         raise UserWarning("Not finished yet!")
 
-
-    elif graphname == 'subgraph3':
-        print(f"Loading coo...", flush=True)
-        edge_index = torch.load("../data/subgraph3/processed/data.pt")
-        print(f"Done loading coo", flush=True)
-        n = 8745542
-        num_features = 128
-        # mid_layer = 512
-        # mid_layer = 64
-        num_classes = 256
-        inputs = torch.rand(n, num_features)
-        data = Data()
-        data.y = torch.rand(n).uniform_(0, num_classes - 1).long()
-        data.train_mask = torch.ones(n).long()
-        print(f"edge_index.size: {edge_index.size()}", flush=True)
-        data = data.to(device)
-        inputs.requires_grad = True
-        data.y = data.y.to(device)
 
     if download:
         exit()
