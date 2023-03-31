@@ -885,9 +885,10 @@ def main():
         print(f"Loading coo...", flush=True)
 
         # Getting edge index
-        if os.path.isfile("/scratch/snx3000/sashkboo/datasets/mawi200M/mawi200M.pt"):
-            edge_index = torch.load("/scratch/snx3000/sashkboo/datasets/mawi200M/mawi200M.pt")
+        if os.path.isfile("/scratch/snx3000/fscheidl/SpMM_datasets/mawi/mawi200M.pt"):
+            edge_index = torch.load("/scratch/snx3000/fscheidl/SpMM_datasets/mawi/mawi200M.pt")
         else:
+            matfile = "/scratch/snx3000/fscheidl/SpMM_datasets/mawi/mawi_201512020330.mat"
             print("Creating edge index file from .mat file")
             # todo: create the edge index file from the .mat file and store as torch.tensor
             raise NotImplementedError
@@ -952,9 +953,10 @@ def main():
         print(f"Loading coo...", flush=True)
 
         # Getting edge index
-        if os.path.isfile("/scratch/snx3000/sashkboo/datasets/genbank/genbank200M.pt"):
-            edge_index = torch.load("/scratch/snx3000/sashkboo/datasets/genbank/genbank200M.pt") ##todo: paths are wrong
+        if os.path.isfile("/scratch/snx3000/fscheidl/SpMM_datasets/genbank/genbank200M.pt"):
+            edge_index = torch.load("/scratch/snx3000/fscheidl/SpMM_datasets/genbank/genbank200M.pt") ##todo: paths are wrong
         else:
+            matfile = "/scratch/snx3000/fscheidl/SpMM_datasets/genbank/kmer_V1r.mat"
             print("Creating edge index file from .mat file")
             # todo: create the edge index file from the .mat file and store as torch.tensor
             raise NotImplementedError

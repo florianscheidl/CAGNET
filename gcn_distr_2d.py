@@ -95,6 +95,13 @@ run_count = 0
 run = 0
 download = False
 
+def find_free_port():
+    import socket
+    s = socket.socket()
+    s.bind(('', 0))  # Bind to a free port provided by the host.
+    return s.getsockname()[1]  # Return the port number assigned.
+
+
 def sync_and_sleep(rank, device):
     torch.cuda.synchronize(device=device)
     print(f"Sleeping rank {rank}", flush=True)
@@ -1449,9 +1456,10 @@ def main():
         print(f"Loading coo...", flush=True)
 
         # Getting edge index
-        if os.path.isfile("/scratch/snx3000/sashkboo/datasets/mawi200M/mawi200M.pt"):
-            edge_index = torch.load("/scratch/snx3000/sashkboo/datasets/mawi200M/mawi200M.pt")
+        if os.path.isfile("/scratch/snx3000/fscheidl/SpMM_datasets/mawi/mawi200M.pt"):
+            edge_index = torch.load("/scratch/snx3000/fscheidl/SpMM_datasets/mawi/mawi200M.pt")
         else:
+            matfile = "/scratch/snx3000/fscheidl/SpMM_datasets/mawi/mawi_201512020330.mat"
             print("Creating edge index file from .mat file")
             # todo: create the edge index file from the .mat file and store as torch.tensor
             raise NotImplementedError
@@ -1516,9 +1524,10 @@ def main():
         print(f"Loading coo...", flush=True)
 
         # Getting edge index
-        if os.path.isfile("/scratch/snx3000/sashkboo/datasets/genbank/genbank200M.pt"):
-            edge_index = torch.load("/scratch/snx3000/sashkboo/datasets/genbank/genbank200M.pt") ##todo: paths are wrong
+        if os.path.isfile("/scratch/snx3000/fscheidl/SpMM_datasets/genbank/genbank200M.pt"):
+            edge_index = torch.load("/scratch/snx3000/fscheidl/SpMM_datasets/genbank/genbank200M.pt") ##todo: paths are wrong
         else:
+            matfile = "/scratch/snx3000/fscheidl/SpMM_datasets/genbank/kmer_V1r.mat"
             print("Creating edge index file from .mat file")
             # todo: create the edge index file from the .mat file and store as torch.tensor
             raise NotImplementedError
@@ -1578,8 +1587,6 @@ def main():
 
         raise UserWarning("Not finished yet!")
 
-
-
     if download:
         exit()
 
@@ -1596,11 +1603,45 @@ def main():
     if "MASTER_ADDR" not in os.environ.keys():
         os.environ["MASTER_ADDR"] = "127.0.0.1"
 
+    if args.world_size == -1 and "SLURM_NPROCS" in os.environ:
+        args.world_size = int(os.environ["SLURM_NPROCS"])
+        args.rank = int(os.environ["SLURM_PROCID"])
+        jobid = os.environ["SLURM_JOBID"]
+
+        hostfile = "dist_url." + jobid + ".txt"
+        if args.dist_file is not None:
+            args.dist_url = "file://{}.{}".format(os.path.realpath(args.dist_file), jobid)
+        elif args.rank == 0:
+            import socket
+            ip = socket.gethostbyname(socket.gethostname())
+            port = find_free_port()
+            args.dist_url = "tcp://{}:{}".format(ip, port)
+            with open(hostfile, "w") as f:
+                f.write(args.dist_url)
+        else:
+            import time
+            while not os.path.exists(hostfile):
+                time.sleep(1)
+            with open(hostfile, "r") as f:
+                args.dist_url = f.read()
+        print("args.dist_url: {}".format(args.dist_url))
+    else:
+        args.dist_url = "env://"
+        args.rank = 0
+        args.world_size = 1
+
     os.environ["MASTER_PORT"] = "1234"
-    dist.init_process_group(backend='gloo')
-    # dist.init_process_group('gloo', init_method='env://')
+
+    print(os.environ["MASTER_ADDR"])
+    print(os.environ["MASTER_PORT"])
+    # print(os.environ["NCCL_DEBUG"])
+    # print(os.environ["NCCL_DEBUG_SUBSYS"])
+
+    # dist.init_process_group(backend='nccl', init_method=args.dist_url, world_size=args.world_size, rank=args.rank)
+    dist.init_process_group(backend='gloo', init_method=args.dist_url, world_size=args.world_size, rank=args.rank)
     rank = dist.get_rank()
     size = dist.get_world_size()
+    print("Processes: " + str(size))
 
     mp.set_start_method('spawn', force=True)
     # device = torch.device('cpu')
@@ -1669,6 +1710,10 @@ if __name__ == '__main__':
     parser.add_argument("--activations", type=str, default="True")
     parser.add_argument("--accuracy", type=str, default="True")
     parser.add_argument("--download", type=bool, default=False)
+
+    parser.add_argument("--world_size", type=int, default=-1)
+    parser.add_argument("--dist_file", type=str, default=None)  # needs to be added in case of distributed training!
+
 
     args = parser.parse_args()
     print(args)
