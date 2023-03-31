@@ -2,7 +2,7 @@
 #SBATCH --job-name="job_name"
 #SBATCH --account="g34"
 #SBATCH --time=30:00
-#SBATCH --nodes=10
+#SBATCH --nodes=9
 #SBATCH --ntasks-per-core=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=1
