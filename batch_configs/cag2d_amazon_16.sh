@@ -14,6 +14,8 @@
 module load daint-gpu
 module swap PrgEnv-cray PrgEnv-gnu
 module load cudatoolkit/10.2.89_3.28-2.1__g52c0314
+module load cray-mpich/7.7.18
+module load cray-libsci/20.09.1
 conda activate cag3
 
 export OMPI_COMM_WORLD_SIZE=$((SLURM_NTASKS * SLURM_NTASKS_PER_NODE))
