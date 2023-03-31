@@ -1656,17 +1656,20 @@ def main():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--local_rank", type=int)
-    parser.add_argument("--accperrank", type=int)
-    parser.add_argument("--epochs", type=int)
-    parser.add_argument("--graphname", type=str)
-    parser.add_argument("--timing", type=str)
-    parser.add_argument("--midlayer", type=int)
-    parser.add_argument("--runcount", type=int)
-    parser.add_argument("--normalization", type=str)
-    parser.add_argument("--activations", type=str)
-    parser.add_argument("--accuracy", type=str)
-    parser.add_argument("--download", type=bool)
+
+    parser.add_argument("--local_rank", type=int, default=1)
+    parser.add_argument("--accperrank", type=int, default=1)
+    parser.add_argument("--epochs", type=int, default=2)
+    parser.add_argument("--graphname", type=str, default="Reddit")
+    parser.add_argument("--timing", type=str, default="True")
+    parser.add_argument("--midlayer", type=int, default=64)
+    parser.add_argument("--runcount", type=int, default=1)
+    parser.add_argument("--replication", type=int, default=1)
+    parser.add_argument("--normalization", type=str, default="True")
+    parser.add_argument("--activations", type=str, default="True")
+    parser.add_argument("--accuracy", type=str, default="True")
+    parser.add_argument("--download", type=bool, default=False)
+
     args = parser.parse_args()
     print(args)
 
